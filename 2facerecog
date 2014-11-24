@@ -1,0 +1,21 @@
+%db = 'dbunlu';
+%load(db);
+
+N = 30;
+
+NN  = size(F,1);        % Overal number of face images.
+fps = NN/N;             % Number of faces per subject.
+m = 200; n = 180;
+% Display faces
+exprNum = 1;            % The number of the particular face expression.
+
+nrows = round(sqrt(N));
+ncols = ceil(N/nrows);
+figure(1); clf; set(gcf, 'Name', 'Faces');
+for ii=1:N
+    subplot(nrows,ncols,ii);
+    tmp = (ii-1)*fps + exprNum;
+    imagesc( reshape(F(tmp,:),m,n) );
+    colormap gray; axis equal tight off;
+    title(num2str(ii));
+end
