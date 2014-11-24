@@ -1,0 +1,57 @@
+close all;
+nrows = 2;
+ncols = 3;
+figure(3); clf; set(gcf, 'Name', 'EigenFaces');
+for ii=1:nrows*ncols
+    subplot(nrows,ncols,ii);
+    imagesc( reshape(V(:,ii),m,n) );
+    colormap gray; axis equal tight off
+    title(['\sigma_' num2str(ii) ' = ' num2str(S(ii,ii), '%1.2e') ]);
+end
+
+
+
+
+nDim = 8;                   % dimensionality of the eigenfaces subspace
+V1 = V(:,1:nDim); 
+
+
+
+
+
+
+
+fn = randint(1,1,[1, NN]);            % Select face at random
+f   = F(fn,:)';
+% YOUR CODE HERE:
+pc1 = PC(fn,1:nDim);                 % project it on the first nDim principle axes
+f1 = V1*pc1';                        % reconstructed face
+rmse = norm(f-f1)/norm(f);           % rms reprojection error
+
+% Plot the original and reconstructed images
+figure(4); clf;
+subplot(1,2,1); imagesc(reshape(f,m,n)); title('Original');
+axis equal tight off
+subplot(1,2,2); imagesc(reshape(f1, m,n));
+title(['||\epsilon_{projection}|| = ' num2str(rmse*100,'%2.2f') ' %']);
+colormap gray; axis equal tight off
+
+
+
+
+
+PC_mean = zeros(N, nDim);       % average feature vectors for each subject
+for ii=1:N
+    ix1 = fps*(ii-1)+1; ix2 = ix1+fps-1;
+    PC_mean(ii,:) = mean(PC(ix1:ix2,1:nDim));
+end
+% Plot faces reconstructed from the feature vectors
+nrows = round(sqrt(N));
+ncols = ceil(N/nrows);
+figure(1); set(gcf, 'Name', 'Face averages');
+for ii=1:N
+    subplot(nrows,ncols,ii);
+    imagesc(reshape(V1*PC_mean(ii,:)',m,n));
+    colormap gray; axis equal tight off
+    title(num2str(ii));
+end
