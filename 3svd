@@ -1,0 +1,3 @@
+[U S V] = svd(F, 'econ');
+PC = U*S;                                % the principle components
+figure(2); clf; semilogy(diag(S), '.');
