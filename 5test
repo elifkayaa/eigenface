@@ -1,0 +1,20 @@
+% Select a face at random and compute its feature vector:
+fn = randint(1,1,[1, NN]);
+f = F(fn,:);                        % test face
+pc1 = V1'*f';                       % its principle component
+
+% Compute distances in the feature space
+Dist = PC_mean - ones(N,1)*pc1';
+dist = sqrt(mean(Dist.^2, 2));
+[min_dist, min_ix] = min(dist);
+
+% Plot
+figure(5); clf; set(gcf, 'Name', 'Face recognition')
+subplot(2,2,1); imagesc( reshape(f,m,n) );
+axis equal tight off; colormap gray;
+title('Test face');
+subplot(2,2,2); imagesc( reshape( F((min_ix-1)*fps+1,:), m,n) );
+axis equal tight off; colormap gray;
+title('Recognized as');
+subplot(2,2,[3 4]); bar(dist, 'FaceColor', 'b');
+xlabel('Subject'); ylabel('Distance [a.u.]');
